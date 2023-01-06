@@ -9,7 +9,7 @@ import { AuthLayout } from '../layout/AuthLayout';
 
 export const LoginPage = () => {
   return (
-    <AuthLayout title='Login Page'>
+    <AuthLayout title='Login'>
       <form>
         <Grid container gap={2}>
           <Grid item xs={12}>
