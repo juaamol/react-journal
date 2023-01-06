@@ -9,6 +9,7 @@ export const AuthLayout: FC<{ children: ReactNode; title: string }> = (
 
   return (
     <Grid
+      className='content'
       container
       spacing={0}
       direction='column'
