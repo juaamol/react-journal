@@ -2,12 +2,21 @@ import { checkingCredentials, login, logout } from './auth-slice';
 import {
   registerUserWithPassword,
   signInWithGoogle,
+  signInWithPassword,
 } from '../../firebase/providers';
 import { Dispatch } from '@reduxjs/toolkit';
 
-export const checkingAuthentication = (email: string, password: string) => {
-  return async (dispatch: any) => {
+export const startPasswordSignIn = (email: string, password: string) => {
+  return async (dispatch: Dispatch) => {
     dispatch(checkingCredentials());
+    const result = await signInWithPassword(email, password);
+
+    if (result.ok) {
+      const user = result.user;
+      dispatch(login({ ...user }));
+    } else {
+      dispatch(logout({ errorMessage: result.errorMessage }));
+    }
   };
 };
 

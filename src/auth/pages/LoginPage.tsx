@@ -8,9 +8,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useMemo } from 'react';
 import { Formik } from 'formik';
-import { checkingAuthentication, startGoogleSignIn } from '../../store';
+import { startPasswordSignIn, startGoogleSignIn } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginValidation } from '../validations';
+import Alert from '@mui/material/Alert';
 
 const initialValues = {
   email: '',
@@ -18,13 +19,13 @@ const initialValues = {
 };
 
 export const LoginPage = () => {
-  const { status } = useAppSelector((state) => state.auth);
+  const { status, errorMessage } = useAppSelector((state) => state.auth);
   const isAuthenticating = useMemo(() => status === 'checking', [status]);
   const dispatch = useAppDispatch();
 
   const onSubmit = (values: { email: string; password: string }) => {
     const { email, password } = values;
-    dispatch(checkingAuthentication(email, password));
+    dispatch(startPasswordSignIn(email, password));
   };
 
   const onGoogleSignIn = () => {
@@ -76,6 +77,9 @@ export const LoginPage = () => {
               </Grid>
 
               <Grid container spacing={2}>
+                <Grid item xs={12} display={!!errorMessage ? '' : 'none'}>
+                  <Alert severity='error'>{errorMessage}</Alert>
+                </Grid>
                 <Grid item xs={12} sm={6}>
                   <Button
                     variant='contained'
