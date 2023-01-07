@@ -9,6 +9,7 @@ import { registerValidation } from '../validations';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useMemo } from 'react';
 import { startCreatingUserWithPassword } from '../../store';
+import Alert from '@mui/material/Alert';
 
 const initialValues = {
   email: '',
@@ -17,7 +18,7 @@ const initialValues = {
 };
 
 export const RegisterPage = () => {
-  const { status } = useAppSelector((state) => state.auth);
+  const { status, errorMessage } = useAppSelector((state) => state.auth);
   const isAuthenticating = useMemo(() => status === 'checking', [status]);
   const dispatch = useAppDispatch();
 
@@ -88,7 +89,10 @@ export const RegisterPage = () => {
               </Grid>
 
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} display={!!errorMessage ? '' : 'none'}>
+                  <Alert severity='error'>{errorMessage}</Alert>
+                </Grid>
+                <Grid item xs={12}>
                   <Button
                     variant='contained'
                     fullWidth
