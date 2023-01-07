@@ -6,6 +6,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout';
 import { Formik } from 'formik';
 import { registerValidation } from '../validations';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useMemo } from 'react';
+import { startCreatingUserWithPassword } from '../../store';
 
 const initialValues = {
   email: '',
@@ -14,8 +17,16 @@ const initialValues = {
 };
 
 export const RegisterPage = () => {
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const { status } = useAppSelector((state) => state.auth);
+  const isAuthenticating = useMemo(() => status === 'checking', [status]);
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (values: {
+    email: string;
+    password: string;
+    displayName: string;
+  }) => {
+    dispatch(startCreatingUserWithPassword(values));
   };
 
   return (
@@ -78,7 +89,12 @@ export const RegisterPage = () => {
 
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Button variant='contained' fullWidth type='submit'>
+                  <Button
+                    variant='contained'
+                    fullWidth
+                    type='submit'
+                    disabled={isAuthenticating}
+                  >
                     Crear cuenta
                   </Button>
                 </Grid>
