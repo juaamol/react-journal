@@ -1,10 +1,24 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
-export const useForm = (initialForm = {}) => {
+export interface FormFields {
+  [key: string]: any;
+}
+
+export interface Form<T> {
+  formState: T;
+  onInputChange: (
+    element: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
+  onResetForm: () => void;
+}
+
+export function useForm<T extends FormFields>(initialForm: T): Form<T> {
   const [formState, setFormState] = useState(initialForm);
 
-  const onInputChange = ({ target }: { target: any }) => {
-    const { name, value } = target;
+  const onInputChange = (
+    element: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = element.target;
     setFormState({
       ...formState,
       [name]: value,
@@ -21,4 +35,4 @@ export const useForm = (initialForm = {}) => {
     onInputChange,
     onResetForm,
   };
-};
+}
