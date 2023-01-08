@@ -1,7 +1,3 @@
-import MenuOutlined from '@mui/icons-material/MenuOutlined';
-import LogoutOutlined from '@mui/icons-material/LogoutOutlined';
-import AppBar from '@mui/material/AppBar';
-import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import { FC } from 'react';
 import Grid from '@mui/material/Grid';
@@ -15,9 +11,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import TurnedInNot from '@mui/icons-material/TurnedInNot';
 import ListItemText from '@mui/material/ListItemText';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 export const SideBar: FC<{ drawerWidth: number }> = (props) => {
   const { drawerWidth = 240 } = props;
+  const username = useAppSelector((state) => state.auth.displayName);
 
   return (
     <Box
@@ -37,7 +35,7 @@ export const SideBar: FC<{ drawerWidth: number }> = (props) => {
       >
         <Toolbar>
           <Typography variant='h6' noWrap component='span'>
-            Username
+            {username}
           </Typography>
         </Toolbar>
         <Divider />

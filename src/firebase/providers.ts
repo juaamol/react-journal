@@ -78,3 +78,7 @@ export const registerUserWithPassword = async (values: {
     };
   }
 };
+
+export function signOut() {
+  return firebaseAuth.signOut();
+}

@@ -6,9 +6,16 @@ import Toolbar from '@mui/material/Toolbar';
 import { FC } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { startLogingOut } from '../../store/auth/thunks';
 
 export const NavBar: FC<{ drawerWidth: number }> = (props) => {
   const { drawerWidth = 240 } = props;
+  const dispatch = useAppDispatch();
+
+  const onLogout = () => {
+    dispatch(startLogingOut());
+  };
 
   return (
     <AppBar
@@ -35,7 +42,7 @@ export const NavBar: FC<{ drawerWidth: number }> = (props) => {
           <Typography variant='h6' noWrap component='span'>
             Journal
           </Typography>
-          <IconButton color='error'>
+          <IconButton color='error' onClick={onLogout}>
             <LogoutOutlined></LogoutOutlined>
           </IconButton>
         </Grid>

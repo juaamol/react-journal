@@ -3,6 +3,7 @@ import {
   registerUserWithPassword,
   signInWithGoogle,
   signInWithPassword,
+  signOut,
 } from '../../firebase/providers';
 import { Dispatch } from '@reduxjs/toolkit';
 
@@ -51,3 +52,12 @@ export const startCreatingUserWithPassword = (values: {
     }
   };
 };
+
+export function startLogingOut() {
+  return async (dispatch: Dispatch) => {
+    try {
+      await signOut();
+      dispatch(logout({ errorMessage: null }));
+    } catch (error) {}
+  };
+}
