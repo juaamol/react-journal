@@ -7,7 +7,7 @@ interface AuthState extends User {
 }
 
 const initialState: AuthState = {
-  status: 'not-authenticated',
+  status: 'checking',
   uid: null,
   email: null,
   displayName: null,
@@ -27,7 +27,7 @@ export const authSlice = createSlice({
       state.photoURL = action.payload.photoURL;
       state.errorMessage = null;
     },
-    logout: (state, action: PayloadAction<{ errorMessage: string }>) => {
+    logout: (state, action: PayloadAction<{ errorMessage: string | null }>) => {
       state.status = 'not-authenticated';
       state.uid = initialState.uid;
       state.email = initialState.email;
