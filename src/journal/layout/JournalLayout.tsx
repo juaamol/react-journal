@@ -8,7 +8,10 @@ const DRAWER_WIDTH = 240;
 export const JournalLayout: FC<{ children: ReactNode }> = (props) => {
   const { children } = props;
   return (
-    <Box display='flex' className='content'>
+    <Box
+      display='flex'
+      className='content animate__animated animate__fadeIn animate__fater'
+    >
       <NavBar drawerWidth={DRAWER_WIDTH} />
       <SideBar drawerWidth={DRAWER_WIDTH} />
       <Box

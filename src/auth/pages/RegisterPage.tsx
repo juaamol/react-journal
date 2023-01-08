@@ -45,7 +45,10 @@ export const RegisterPage = () => {
           handleChange,
           handleSubmit,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className='animate__animated animate__fadeIn animate__fater'
+          >
             <Grid container gap={2}>
               <Grid item xs={12}>
                 <TextField
