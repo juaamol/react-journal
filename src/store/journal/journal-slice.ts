@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Note {
   id: string;
   title: string;
   body: string;
   date: number;
-  imageURLs: string[];
+  imageURLs?: string[];
 }
 
 interface JournalState {
@@ -16,7 +16,7 @@ interface JournalState {
 }
 
 const initialState: JournalState = {
-  isSaving: true,
+  isSaving: false,
   savedMessage: '',
   notes: [],
   active: null,
@@ -26,10 +26,17 @@ export const journalSlice = createSlice({
   name: 'journal',
   initialState,
   reducers: {
-    addNewEmptyNote: () => {},
-    setActiveNote: () => {},
+    addNewEmptyNote: (state, action: PayloadAction<Note>) => {
+      state.notes.push(action.payload);
+      state.isSaving = false;
+    },
+    setActiveNote: (state, action: PayloadAction<Note>) => {
+      state.active = action.payload;
+    },
     setNotes: () => {},
-    setSaving: () => {},
+    setSaving: (state) => {
+      state.isSaving = true;
+    },
     updateNote: () => {},
     deleteNoteById: () => {},
   },
