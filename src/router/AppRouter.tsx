@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
 import { JournalRoutes } from '../journal/router/JournalRoutes';
 import { CheckingAuth } from '../ui/components';
-import { useCheckAuth } from '../hooks/useCheckAth';
+import { useCheckAuth } from '../hooks/useCheckAuth';
 
 export const AppRouter = () => {
   const status = useCheckAuth();

@@ -1,2 +1,3 @@
 export * from './journal-slice';
-export * from './thunk';
+export * from './thunks';
+export * from './loadNotes';

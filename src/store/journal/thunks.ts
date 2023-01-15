@@ -2,7 +2,13 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { collection, doc, setDoc } from 'firebase/firestore/lite';
 import { store } from '../store';
 import { firebaseDB } from '../../firebase/firebase-config';
-import { addNewEmptyNote, setActiveNote, setSaving } from './journal-slice';
+import {
+  addNewEmptyNote,
+  setActiveNote,
+  setNotes,
+  setSaving,
+} from './journal-slice';
+import { loadNotes } from './loadNotes';
 
 export const startNewNote = () => {
   return async (dispatch: Dispatch, getState: typeof store.getState) => {
@@ -22,5 +28,20 @@ export const startNewNote = () => {
     dispatch(setActiveNote(activeNote));
 
     console.log({ newDoc });
+  };
+};
+
+export const startLoadingNotes = () => {
+  return async (dispatch: Dispatch, getState: typeof store.getState) => {
+    dispatch(setSaving());
+
+    const { uid } = getState().auth;
+
+    if (!uid) {
+      throw new Error('User does not contain a uid');
+    }
+
+    const notes = await loadNotes(uid);
+    dispatch(setNotes(notes));
   };
 };
