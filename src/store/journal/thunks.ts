@@ -5,8 +5,10 @@ import { firebaseDB } from '../../firebase/firebase-config';
 import {
   addNewEmptyNote,
   setActiveNote,
+  setIsNotSaving,
   setNotes,
   setSaving,
+  updateListWithActive,
 } from './journal-slice';
 import { loadNotes } from './loadNotes';
 
@@ -26,8 +28,7 @@ export const startNewNote = () => {
     const activeNote = { ...newNote, id: newDoc.id };
     dispatch(addNewEmptyNote(activeNote));
     dispatch(setActiveNote(activeNote));
-
-    console.log({ newDoc });
+    dispatch(setIsNotSaving());
   };
 };
 
@@ -43,3 +44,28 @@ export const startLoadingNotes = () => {
     dispatch(setNotes(notes));
   };
 };
+
+export function startSavingNote() {
+  return async (dispatch: Dispatch, getState: typeof store.getState) => {
+    dispatch(setSaving());
+
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+
+    if (!uid) {
+      throw new Error('User does not contain a uid');
+    }
+
+    if (!note) {
+      throw new Error('No note to update');
+    }
+
+    const { id, ...noteToFirestore } = { ...note };
+    const docRef = doc(firebaseDB, `${uid}/journal/notes/${id}`);
+
+    await setDoc(docRef, noteToFirestore, { merge: true });
+
+    dispatch(updateListWithActive());
+    dispatch(setIsNotSaving());
+  };
+}

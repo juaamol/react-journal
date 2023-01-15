@@ -4,8 +4,20 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ImageGallery } from '../components';
+import { Note, updateNote } from '../../store/journal/journal-slice';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { startSavingNote } from '../../store/journal';
+import { useAppSelector } from '../../hooks';
 
-export const NoteView = () => {
+export const NoteView = (props: { note: Note }) => {
+  const { note } = props;
+  const dispatch = useAppDispatch();
+  const { isSaving } = useAppSelector((state) => state.journal);
+
+  const onSaveNote = () => {
+    dispatch(startSavingNote());
+  };
+
   return (
     <Grid
       container
@@ -17,11 +29,16 @@ export const NoteView = () => {
     >
       <Grid item>
         <Typography fontSize={39} fontWeight='light'>
-          {new Date().toDateString()}
+          {new Date(note.date).toLocaleDateString()}
         </Typography>
       </Grid>
       <Grid item>
-        <Button color='primary' variant='contained'>
+        <Button
+          color='primary'
+          variant='contained'
+          onClick={onSaveNote}
+          disabled={isSaving}
+        >
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           <Typography>Save</Typography>
         </Button>
@@ -34,6 +51,8 @@ export const NoteView = () => {
             fullWidth
             placeholder='Add a title'
             label='title'
+            onChange={(e) => dispatch(updateNote({ title: e.target.value }))}
+            value={note.title}
           />
         </Grid>
         <Grid item xs={12}>
@@ -45,6 +64,8 @@ export const NoteView = () => {
             minRows={5}
             placeholder='What happened today?'
             label='Description'
+            onChange={(e) => dispatch(updateNote({ body: e.target.value }))}
+            value={note.body}
           />
         </Grid>
       </Grid>

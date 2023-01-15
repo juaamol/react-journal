@@ -28,7 +28,6 @@ export const journalSlice = createSlice({
   reducers: {
     addNewEmptyNote: (state, action: PayloadAction<Note>) => {
       state.notes.push(action.payload);
-      state.isSaving = false;
     },
     setActiveNote: (state, action: PayloadAction<Note>) => {
       state.active = action.payload;
@@ -39,7 +38,26 @@ export const journalSlice = createSlice({
     setSaving: (state) => {
       state.isSaving = true;
     },
-    updateNote: () => {},
+    setIsNotSaving: (state) => {
+      state.isSaving = false;
+    },
+    updateNote: (
+      state,
+      action: PayloadAction<Partial<Pick<Note, 'title' | 'body'>>>,
+    ) => {
+      if (state.active) {
+        state.active = { ...state.active, ...action.payload };
+      }
+    },
+    updateListWithActive: (state) => {
+      state.notes = state.notes.map((note) => {
+        if (note.id === state.active?.id) {
+          return { ...state.active };
+        }
+
+        return { ...note };
+      });
+    },
     deleteNoteById: () => {},
   },
 });
@@ -49,6 +67,8 @@ export const {
   setActiveNote,
   setNotes,
   setSaving,
+  setIsNotSaving,
+  updateListWithActive,
   updateNote,
   deleteNoteById,
 } = journalSlice.actions;

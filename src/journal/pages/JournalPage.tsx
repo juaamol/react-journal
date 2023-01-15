@@ -14,7 +14,11 @@ export const JournalPage = () => {
 
   return (
     <JournalLayout>
-      {journalState.active ? <NoteView /> : <NothingSelectedView />}
+      {journalState.active ? (
+        <NoteView note={journalState.active} />
+      ) : (
+        <NothingSelectedView />
+      )}
       <IconButton
         onClick={onNewNote}
         size='large'

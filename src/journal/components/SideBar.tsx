@@ -12,10 +12,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import TurnedInNot from '@mui/icons-material/TurnedInNot';
 import ListItemText from '@mui/material/ListItemText';
 import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { setActiveNote } from '../../store/journal';
 
 export const SideBar: FC<{ drawerWidth: number }> = (props) => {
   const { drawerWidth = 240 } = props;
   const { auth, journal } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
   const username = auth.displayName;
   const notes = journal.notes;
 
@@ -44,7 +47,7 @@ export const SideBar: FC<{ drawerWidth: number }> = (props) => {
         <List>
           {notes.map((note) => (
             <ListItem key={note.id} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => dispatch(setActiveNote(note))}>
                 <ListItemIcon>
                   <TurnedInNot />
                 </ListItemIcon>
