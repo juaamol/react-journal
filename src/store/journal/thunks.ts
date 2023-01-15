@@ -33,8 +33,6 @@ export const startNewNote = () => {
 
 export const startLoadingNotes = () => {
   return async (dispatch: Dispatch, getState: typeof store.getState) => {
-    dispatch(setSaving());
-
     const { uid } = getState().auth;
 
     if (!uid) {

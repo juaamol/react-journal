@@ -1,5 +1,6 @@
 import { collection, getDocs } from 'firebase/firestore/lite';
 import { firebaseDB } from '../../firebase/firebase-config';
+import { Note } from './journal-slice';
 
 export async function loadNotes(uid: string) {
   if (!uid) {
@@ -8,10 +9,12 @@ export async function loadNotes(uid: string) {
 
   const collectionRef = collection(firebaseDB, `${uid}/journal/notes`);
   const docs = await getDocs(collectionRef);
-  const notes: any[] = [];
+  const notes: Note[] = [];
 
   docs.forEach((doc) => {
-    notes.push({ ...doc.data(), id: doc.id });
+    const { title, body, date } = doc.data();
+    const { id } = doc;
+    notes.push({ title, body, date, id });
   });
 
   return notes;

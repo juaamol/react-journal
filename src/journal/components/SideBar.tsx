@@ -15,7 +15,9 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 
 export const SideBar: FC<{ drawerWidth: number }> = (props) => {
   const { drawerWidth = 240 } = props;
-  const username = useAppSelector((state) => state.auth.displayName);
+  const { auth, journal } = useAppSelector((state) => state);
+  const username = auth.displayName;
+  const notes = journal.notes;
 
   return (
     <Box
@@ -40,15 +42,15 @@ export const SideBar: FC<{ drawerWidth: number }> = (props) => {
         </Toolbar>
         <Divider />
         <List>
-          {['Enero', 'Febrero', 'Marzo', 'Abril'].map((text) => (
-            <ListItem key={text} disablePadding>
+          {notes.map((note) => (
+            <ListItem key={note.id} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   <TurnedInNot />
                 </ListItemIcon>
                 <Grid container>
-                  <ListItemText primary={text} />
-                  <ListItemText secondary='Lorem ipsum dolor sit amet consectetur adipisicing elit. At, dignissimos?' />
+                  <ListItemText primary={note.title} />
+                  <ListItemText secondary={note.body} />
                 </Grid>
               </ListItemButton>
             </ListItem>

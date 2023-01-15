@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Note {
+export interface Note {
   id: string;
   title: string;
   body: string;
@@ -11,7 +11,7 @@ interface Note {
 interface JournalState {
   isSaving: boolean;
   savedMessage: string;
-  notes: any[];
+  notes: Note[];
   active: Note | null;
 }
 
