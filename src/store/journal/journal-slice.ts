@@ -31,12 +31,14 @@ export const journalSlice = createSlice({
     },
     setActiveNote: (state, action: PayloadAction<Note>) => {
       state.active = action.payload;
+      state.savedMessage = '';
     },
     setNotes: (state, action: PayloadAction<Note[]>) => {
       state.notes = action.payload;
     },
     setSaving: (state) => {
       state.isSaving = true;
+      state.savedMessage = '';
     },
     setIsNotSaving: (state) => {
       state.isSaving = false;
@@ -50,13 +52,16 @@ export const journalSlice = createSlice({
       }
     },
     updateListWithActive: (state) => {
-      state.notes = state.notes.map((note) => {
-        if (note.id === state.active?.id) {
-          return { ...state.active };
-        }
+      if (state.active) {
+        state.savedMessage = `${state.active.title} has been saved successfully`;
+        state.notes = state.notes.map((note) => {
+          if (note.id === state.active?.id) {
+            return { ...state.active };
+          }
 
-        return { ...note };
-      });
+          return { ...note };
+        });
+      }
     },
     deleteNoteById: () => {},
   },

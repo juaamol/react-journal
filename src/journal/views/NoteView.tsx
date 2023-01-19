@@ -8,15 +8,25 @@ import { Note, updateNote } from '../../store/journal/journal-slice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { startSavingNote } from '../../store/journal';
 import { useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 export const NoteView = (props: { note: Note }) => {
   const { note } = props;
+  const { isSaving, savedMessage } = useAppSelector((state) => state.journal);
+  const dateFormater = Intl.DateTimeFormat('en', { dateStyle: 'long' });
+  const date = dateFormater.format(note.date);
   const dispatch = useAppDispatch();
-  const { isSaving } = useAppSelector((state) => state.journal);
 
   const onSaveNote = () => {
     dispatch(startSavingNote());
   };
+
+  useEffect(() => {
+    if (savedMessage.length) {
+      Swal.fire('Note saved', savedMessage, 'success');
+    }
+  }, [savedMessage]);
 
   return (
     <Grid
@@ -29,7 +39,7 @@ export const NoteView = (props: { note: Note }) => {
     >
       <Grid item>
         <Typography fontSize={39} fontWeight='light'>
-          {new Date(note.date).toLocaleDateString()}
+          {date}
         </Typography>
       </Grid>
       <Grid item>
