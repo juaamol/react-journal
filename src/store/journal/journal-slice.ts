@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logout } from '../auth';
 
 export interface Note {
   id: string;
@@ -78,6 +79,11 @@ export const journalSlice = createSlice({
       }
     },
     deleteNoteById: () => {},
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logout, () => {
+      return initialState;
+    });
   },
 });
 
