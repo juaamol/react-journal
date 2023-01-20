@@ -1,4 +1,4 @@
-import { SaveOutlined } from '@mui/icons-material';
+import { SaveOutlined, UploadOutlined } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -8,8 +8,9 @@ import { Note, updateNote } from '../../store/journal/journal-slice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { startSavingNote } from '../../store/journal';
 import { useAppSelector } from '../../hooks';
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
+import { IconButton } from '@mui/material';
 
 export const NoteView = (props: { note: Note }) => {
   const { note } = props;
@@ -18,8 +19,18 @@ export const NoteView = (props: { note: Note }) => {
   const date = dateFormater.format(note.date);
   const dispatch = useAppDispatch();
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const onSaveNote = () => {
     dispatch(startSavingNote());
+  };
+
+  const onFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+
+    if (files) {
+      //dispatch(startUploadingFiles(files));
+    }
   };
 
   useEffect(() => {
@@ -43,6 +54,20 @@ export const NoteView = (props: { note: Note }) => {
         </Typography>
       </Grid>
       <Grid item>
+        <input
+          type='file'
+          ref={inputRef}
+          multiple
+          onChange={onFileSelect}
+          style={{ display: 'none' }}
+        />
+        <IconButton
+          onClick={() => inputRef.current?.click()}
+          disabled={isSaving}
+        >
+          <UploadOutlined />
+        </IconButton>
+
         <Button
           color='primary'
           variant='contained'
