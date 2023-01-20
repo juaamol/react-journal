@@ -5,6 +5,7 @@ import { firebaseDB } from '../../firebase/firebase-config';
 import {
   addNewEmptyNote,
   setActiveNote,
+  setActiveNoteImages,
   setIsNotSaving,
   setNotes,
   setSaving,
@@ -72,10 +73,14 @@ export function startSavingNote() {
 }
 
 export function startUploadingFiles(files: FileList) {
-  return async (dispatch: Dispatch, getState: typeof store.getState) => {
+  return async (dispatch: Dispatch) => {
     dispatch(setSaving());
 
-    const url = await fileUpload(files[0]);
+    const filesArray = Array.from(files);
+    const pendingUploads = filesArray.map((file) => fileUpload(file));
+    const urls = await Promise.all(pendingUploads);
+
+    dispatch(setActiveNoteImages(urls));
     dispatch(setIsNotSaving());
   };
 }
