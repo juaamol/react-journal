@@ -1,9 +1,10 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import { collection, doc, setDoc } from 'firebase/firestore/lite';
+import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
 import { store } from '../store';
 import { firebaseDB } from '../../firebase/firebase-config';
 import {
   addNewEmptyNote,
+  deleteActiveNote,
   setActiveNote,
   setActiveNoteImages,
   setIsNotSaving,
@@ -81,6 +82,29 @@ export function startUploadingFiles(files: FileList) {
     const urls = await Promise.all(pendingUploads);
 
     dispatch(setActiveNoteImages(urls));
+    dispatch(setIsNotSaving());
+  };
+}
+
+export function startDeletingNote() {
+  return async (dispatch: Dispatch, getState: typeof store.getState) => {
+    dispatch(setSaving());
+
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+
+    if (!uid) {
+      throw new Error('User does not contain a uid');
+    }
+
+    if (!note) {
+      throw new Error('Select a note to delete');
+    }
+
+    const docRef = doc(firebaseDB, `${uid}/journal/notes/${note.id}`);
+    await deleteDoc(docRef);
+
+    dispatch(deleteActiveNote());
     dispatch(setIsNotSaving());
   };
 }

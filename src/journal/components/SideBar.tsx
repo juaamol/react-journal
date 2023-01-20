@@ -51,7 +51,7 @@ export const SideBar: FC<{ drawerWidth: number }> = (props) => {
                 <ListItemIcon>
                   <TurnedInNot />
                 </ListItemIcon>
-                <Grid container>
+                <Grid container flexDirection='column'>
                   <ListItemText primary={note.title} />
                   <ListItemText secondary={note.body} />
                 </Grid>

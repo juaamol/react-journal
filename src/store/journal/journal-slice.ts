@@ -78,7 +78,13 @@ export const journalSlice = createSlice({
         });
       }
     },
-    deleteNoteById: () => {},
+    deleteActiveNote: (state) => {
+      if (state.active) {
+        const activeId = state.active.id;
+        state.active = initialState.active;
+        state.notes = state.notes.filter((note) => note.id !== activeId);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(logout, () => {
@@ -97,5 +103,5 @@ export const {
   updateListWithActive,
   clearNotes,
   updateNote,
-  deleteNoteById,
+  deleteActiveNote,
 } = journalSlice.actions;
