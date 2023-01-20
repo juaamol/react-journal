@@ -1,9 +1,10 @@
+import config from '../../config/config';
+
 export async function fileUpload(file: any) {
-  const viteEnv = import.meta.env || {};
-  const cloudinaryUrl = viteEnv.VITE_CLOUDINARY_URL_UPLOAD;
+  const cloudinaryUrl = config.CLOUDINARY_URL_UPLOAD;
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', viteEnv.VITE_CLOUDINARY_UPLOAD_PRESET);
+  formData.append('upload_preset', config.CLOUDINARY_UPLOAD_PRESET);
 
   try {
     const response = await fetch(cloudinaryUrl, {

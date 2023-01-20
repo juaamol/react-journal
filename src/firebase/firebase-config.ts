@@ -1,16 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
-
-const viteEnv = import.meta.env;
+import config from '../config/config';
 
 export const firebaseConfig = {
-  apiKey: viteEnv.VITE_API_KEY,
-  authDomain: viteEnv.VITE_AUTH_DOMAIN,
-  projectId: viteEnv.VITE_PROJECT_ID,
-  storageBucket: viteEnv.VITE_STORAGE_BUCKET,
-  messagingSenderId: viteEnv.VITE_MESSAGING_SENDER_ID,
-  appId: viteEnv.VITE_APP_ID,
+  apiKey: config.API_KEY,
+  authDomain: config.AUTH_DOMAIN,
+  projectId: config.PROJECT_ID,
+  storageBucket: config.STORAGE_BUCKET,
+  messagingSenderId: config.MESSAGING_SENDER_ID,
+  appId: config.APP_ID,
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
