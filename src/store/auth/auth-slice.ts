@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../auth/types/user';
 
-interface AuthState extends User {
+export interface AuthState extends User {
   status: 'authenticated' | 'not-authenticated' | 'checking';
   errorMessage: string | null;
 }
