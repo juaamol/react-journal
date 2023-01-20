@@ -11,6 +11,7 @@ import { useAppSelector } from '../../hooks';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { IconButton } from '@mui/material';
+import { startUploadingFiles } from '../../store/journal/thunks';
 
 export const NoteView = (props: { note: Note }) => {
   const { note } = props;
@@ -29,7 +30,7 @@ export const NoteView = (props: { note: Note }) => {
     const files = event.target.files;
 
     if (files) {
-      //dispatch(startUploadingFiles(files));
+      dispatch(startUploadingFiles(files));
     }
   };
 

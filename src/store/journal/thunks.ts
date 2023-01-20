@@ -11,6 +11,7 @@ import {
   updateListWithActive,
 } from './journal-slice';
 import { loadNotes } from './loadNotes';
+import { fileUpload } from './fileUpload';
 
 export const startNewNote = () => {
   return async (dispatch: Dispatch, getState: typeof store.getState) => {
@@ -66,6 +67,15 @@ export function startSavingNote() {
     await setDoc(docRef, noteToFirestore, { merge: true });
 
     dispatch(updateListWithActive());
+    dispatch(setIsNotSaving());
+  };
+}
+
+export function startUploadingFiles(files: FileList) {
+  return async (dispatch: Dispatch, getState: typeof store.getState) => {
+    dispatch(setSaving());
+
+    const url = await fileUpload(files[0]);
     dispatch(setIsNotSaving());
   };
 }
