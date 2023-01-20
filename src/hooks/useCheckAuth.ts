@@ -22,7 +22,7 @@ export const useCheckAuth = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   return status;
 };

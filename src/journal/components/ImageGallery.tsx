@@ -14,7 +14,7 @@ export const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
           <img
             src={`${url}?w=164&h=164&fit=crop&auto=format`}
             srcSet={`${url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            alt='Image for note'
+            alt='Uploaded for the note'
             loading='lazy'
           />
         </ImageListItem>
