@@ -1,5 +1,5 @@
-import { fileUpload } from './fileUpload';
-import config from '../../config/config';
+import { fileUpload } from '../../../store/journal/fileUpload';
+import config from '../../../config/config';
 
 describe('Test file upload', () => {
   test('Should call fetch with the file and the correct endpoint', async () => {
