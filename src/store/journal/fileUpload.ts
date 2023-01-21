@@ -1,6 +1,7 @@
 import config from '../../config/config';
+import { NoteImage } from './journal-slice';
 
-export async function fileUpload(file: any) {
+export async function fileUpload(file: any): Promise<NoteImage> {
   const cloudinaryUrl = config.CLOUDINARY_URL_UPLOAD;
   const formData = new FormData();
   formData.append('file', file);
@@ -13,9 +14,10 @@ export async function fileUpload(file: any) {
     });
 
     if (response.ok) {
-      const jsonResponse = await response.json();
+      const { public_id, secure_url } = await response.json();
+      const image = { id: public_id, url: secure_url };
 
-      return jsonResponse.secure_url;
+      return image;
     } else {
       throw new Error('Unable to upload file');
     }

@@ -79,9 +79,9 @@ export function startUploadingFiles(files: FileList) {
 
     const filesArray = Array.from(files);
     const pendingUploads = filesArray.map((file) => fileUpload(file));
-    const urls = await Promise.all(pendingUploads);
+    const images = await Promise.all(pendingUploads);
 
-    dispatch(setActiveNoteImages(urls));
+    dispatch(setActiveNoteImages(images));
     dispatch(setIsNotSaving());
   };
 }

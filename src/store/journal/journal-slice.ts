@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout } from '../auth';
 
+export interface NoteImage {
+  id: string;
+  url: string;
+}
 export interface Note {
   id: string;
   title: string;
   body: string;
   date: number;
-  imageURLs?: string[];
+  images?: NoteImage[];
 }
 
 export interface JournalState {
@@ -44,12 +48,12 @@ export const journalSlice = createSlice({
     setIsNotSaving: (state) => {
       state.isSaving = false;
     },
-    setActiveNoteImages: (state, action: PayloadAction<string[]>) => {
+    setActiveNoteImages: (state, action: PayloadAction<NoteImage[]>) => {
       if (state.active) {
-        const images = state.active.imageURLs;
+        const images = state.active.images;
         const newImages = action.payload;
         const updatedImages = [...(images || []), ...newImages];
-        state.active.imageURLs = updatedImages;
+        state.active.images = updatedImages;
       }
     },
     updateNote: (
