@@ -4,6 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+jest.mock('./firebase/firebase-config', () => ({}));
 jest.mock('./config/config', () => {
   return {
     CLOUDINARY_UPLOAD_PRESET: 'react-journal',

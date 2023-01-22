@@ -7,14 +7,12 @@ import {
 import {
   authenticatedState,
   notAuthenticatesState,
-} from '../../fixtures/auth-fixtures';
-import {
   initialState,
   testUser,
   errorState,
 } from '../../fixtures/auth-fixtures';
 
-describe('Test file upload', () => {
+describe('Test login states upload', () => {
   test('Should return inital state with name "auth"', () => {
     expect(authSlice.name).toBe('auth');
     const state = authSlice.reducer(initialState, { type: '' });
