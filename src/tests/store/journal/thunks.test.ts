@@ -3,6 +3,7 @@ import {
   startLoadingNotes,
   startNewNote,
   startSavingNote,
+  startUploadingFiles,
 } from '../../../store/journal/thunks';
 import {
   addNewEmptyNote,
@@ -21,9 +22,14 @@ import {
   testDocumentRef,
   testEmptyNote,
 } from '../../fixtures/journal-fixtures';
+import { fileUpload } from '../../../store/journal/fileUpload';
 
 jest.mock('../../../store/journal/loadNotes', () => ({
   loadNotes: jest.fn(),
+}));
+
+jest.mock('../../../store/journal/fileUpload', () => ({
+  fileUpload: jest.fn(),
 }));
 
 jest.mock('firebase/firestore/lite', () => ({
@@ -94,6 +100,26 @@ describe('Test journal thunks', () => {
     expect((setDoc as jest.Mock).mock.calls[0][0]).toEqual(testDocumentRef);
     expect((setDoc as jest.Mock).mock.calls[0][1]).toEqual(noteToFirestore);
     expect((setDoc as jest.Mock).mock.calls[0][2]).toEqual({ merge: true });
+  });
+
+  test('Should upload files', async () => {
+    const files = new Array(3) as unknown as FileList;
+    (fileUpload as jest.Mock).mockImplementation(() =>
+      Promise.resolve({ id: '1', url: 'url' }),
+    );
+    const dispatch = jest.fn();
+    await startUploadingFiles(files)(dispatch);
+
+    expect(dispatch).toHaveBeenCalledTimes(3);
+    expect(dispatch).toHaveBeenCalledWith(setSaving());
+    expect(dispatch).toHaveBeenCalledWith(setIsNotSaving());
+    expect(dispatch).toHaveBeenCalledWith(
+      setActiveNoteImages([
+        { id: '1', url: 'url' },
+        { id: '1', url: 'url' },
+        { id: '1', url: 'url' },
+      ]),
+    );
   });
 
   afterAll(() => {
