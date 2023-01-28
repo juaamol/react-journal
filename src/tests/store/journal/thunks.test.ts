@@ -1,5 +1,9 @@
 import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
-import { startLoadingNotes, startNewNote } from '../../../store/journal/thunks';
+import {
+  startLoadingNotes,
+  startNewNote,
+  startSavingNote,
+} from '../../../store/journal/thunks';
 import {
   addNewEmptyNote,
   deleteActiveNote,
@@ -11,7 +15,7 @@ import {
   updateListWithActive,
 } from '../../../store/journal';
 import { loadNotes } from '../../../store/journal/loadNotes';
-import { rootAuthenticatedState } from '../../fixtures/store-fixtures';
+import { testRootState } from '../../fixtures/store-fixtures';
 import {
   testCollectionRef,
   testDocumentRef,
@@ -36,7 +40,7 @@ describe('Test journal thunks', () => {
   });
 
   test('Should add a new note with id', async () => {
-    const state = rootAuthenticatedState;
+    const state = testRootState;
     const resourceUrl = `${state.auth.uid}/journal/notes`;
     const getState = jest.fn(() => state);
     (collection as jest.Mock).mockReturnValue(testCollectionRef);
@@ -62,7 +66,7 @@ describe('Test journal thunks', () => {
   });
 
   test('Should load notes', async () => {
-    const state = rootAuthenticatedState;
+    const state = testRootState;
     const getState = jest.fn(() => state);
     (loadNotes as jest.Mock).mockReturnValue([testEmptyNote]);
     const dispatch = jest.fn();
@@ -71,6 +75,25 @@ describe('Test journal thunks', () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(setNotes([testEmptyNote]));
     expect(loadNotes as jest.Mock).toHaveBeenCalledWith(state.auth.uid);
+  });
+
+  test('Should save note', async () => {
+    const state = testRootState;
+    const { id, ...noteToFirestore } = state.journal.active!;
+    const resourceUrl = `${state.auth.uid}/journal/notes/${id}`;
+    const getState = jest.fn(() => state);
+    (doc as jest.Mock).mockReturnValue(testDocumentRef);
+    const dispatch = jest.fn();
+    await startSavingNote()(dispatch, getState);
+
+    expect(dispatch).toHaveBeenCalledTimes(3);
+    expect(dispatch).toHaveBeenCalledWith(setSaving());
+    expect(dispatch).toHaveBeenCalledWith(updateListWithActive());
+    expect(dispatch).toHaveBeenCalledWith(setIsNotSaving());
+    expect((doc as jest.Mock).mock.calls[0][1]).toBe(resourceUrl);
+    expect((setDoc as jest.Mock).mock.calls[0][0]).toEqual(testDocumentRef);
+    expect((setDoc as jest.Mock).mock.calls[0][1]).toEqual(noteToFirestore);
+    expect((setDoc as jest.Mock).mock.calls[0][2]).toEqual({ merge: true });
   });
 
   afterAll(() => {
