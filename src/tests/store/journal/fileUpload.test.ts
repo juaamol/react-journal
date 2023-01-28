@@ -1,10 +1,10 @@
-import { fileUpload } from './fileUpload';
-import config from '../../config/config';
+import { fileUpload } from '../../../store/journal/fileUpload';
+import config from '../../../config/config';
 
 describe('Test file upload', () => {
   test('Should call fetch with the file and the correct endpoint', async () => {
     const file = 'Im a file';
-    const secure_url = await fileUpload(file);
+    const image = await fileUpload(file);
     const preset = config.CLOUDINARY_UPLOAD_PRESET;
     const firstCall = (fetch as jest.Mock).mock.calls[0];
 
@@ -12,7 +12,7 @@ describe('Test file upload', () => {
     expect(firstCall[1].body.get('file')).toEqual(file);
     expect(firstCall[1].body.get('upload_preset')).toEqual(preset);
     expect((fetch as jest.Mock).mock.calls).toHaveLength(1);
-    expect(secure_url).toBe('some_url');
+    expect(image).toEqual({ id: 'id', url: 'secure_url' });
   });
 
   test('Should fail upload', async () => {

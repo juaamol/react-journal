@@ -4,6 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
+jest.mock('./firebase/firebase-config', () => ({}));
 jest.mock('./config/config', () => {
   return {
     CLOUDINARY_UPLOAD_PRESET: 'react-journal',
@@ -11,13 +12,14 @@ jest.mock('./config/config', () => {
   };
 });
 
-async function mockFetch(url: string, config: { [key: string]: any }) {
+async function mockFetch(url: string) {
   switch (url) {
     case 'cloudinary_url': {
       return {
         ok: true,
         status: 200,
-        json: () => Promise.resolve({ secure_url: 'some_url' }),
+        json: () =>
+          Promise.resolve({ public_id: 'id', secure_url: 'secure_url' }),
       };
     }
     default: {

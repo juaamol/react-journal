@@ -127,7 +127,7 @@ export const NoteView = (props: { note: Note }) => {
           Delete
         </Button>
       </Grid>
-      <ImageGallery images={note.imageURLs || []} />
+      <ImageGallery images={note.images || []} />
     </Grid>
   );
 };

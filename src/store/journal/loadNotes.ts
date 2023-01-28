@@ -12,9 +12,9 @@ export async function loadNotes(uid: string) {
   const notes: Note[] = [];
 
   docs.forEach((doc) => {
-    const { title, body, date, imageURLs } = doc.data();
+    const { title, body, date, images } = doc.data();
     const { id } = doc;
-    notes.push({ title, body, date, id, imageURLs });
+    notes.push({ title, body, date, id, images });
   });
 
   return notes;
