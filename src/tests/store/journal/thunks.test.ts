@@ -1,5 +1,5 @@
 import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
-import { startNewNote } from '../../../store/journal/thunks';
+import { startLoadingNotes, startNewNote } from '../../../store/journal/thunks';
 import {
   addNewEmptyNote,
   deleteActiveNote,
@@ -10,7 +10,17 @@ import {
   setSaving,
   updateListWithActive,
 } from '../../../store/journal';
-import { RootState, store } from '../../../store';
+import { loadNotes } from '../../../store/journal/loadNotes';
+import { rootAuthenticatedState } from '../../fixtures/store-fixtures';
+import {
+  testCollectionRef,
+  testDocumentRef,
+  testEmptyNote,
+} from '../../fixtures/journal-fixtures';
+
+jest.mock('../../../store/journal/loadNotes', () => ({
+  loadNotes: jest.fn(),
+}));
 
 jest.mock('firebase/firestore/lite', () => ({
   collection: jest.fn(),
@@ -26,20 +36,18 @@ describe('Test journal thunks', () => {
   });
 
   test('Should add a new note with id', async () => {
-    const collectionRef = { type: 'collection' };
-    const documentRef = { id: '1234', type: 'document' };
-    const state = { auth: { uid: 1 } } as unknown as RootState;
+    const state = rootAuthenticatedState;
     const resourceUrl = `${state.auth.uid}/journal/notes`;
     const getState = jest.fn(() => state);
-    (collection as jest.Mock).mockReturnValue(collectionRef);
-    (doc as jest.Mock).mockReturnValue(documentRef);
+    (collection as jest.Mock).mockReturnValue(testCollectionRef);
+    (doc as jest.Mock).mockReturnValue(testDocumentRef);
     const dispatch = jest.fn();
     await startNewNote()(dispatch, getState);
 
     const emptyNote = { title: '', body: '', date: new Date().getTime() };
     const addedNote = {
       ...emptyNote,
-      id: documentRef.id,
+      id: testDocumentRef.id,
     };
 
     expect(dispatch).toHaveBeenCalledTimes(4);
@@ -47,10 +55,22 @@ describe('Test journal thunks', () => {
     expect(dispatch).toHaveBeenCalledWith(addNewEmptyNote(addedNote));
     expect(dispatch).toHaveBeenCalledWith(setActiveNote(addedNote));
     expect(dispatch).toHaveBeenCalledWith(setIsNotSaving());
+    expect(doc as jest.Mock).toHaveBeenCalledWith(testCollectionRef);
     expect((collection as jest.Mock).mock.calls[0][1]).toBe(resourceUrl);
-    expect(doc as jest.Mock).toHaveBeenCalledWith(collectionRef);
-    expect((setDoc as jest.Mock).mock.calls[0][0]).toEqual(documentRef);
+    expect((setDoc as jest.Mock).mock.calls[0][0]).toEqual(testDocumentRef);
     expect((setDoc as jest.Mock).mock.calls[0][1]).toEqual(emptyNote);
+  });
+
+  test('Should load notes', async () => {
+    const state = rootAuthenticatedState;
+    const getState = jest.fn(() => state);
+    (loadNotes as jest.Mock).mockReturnValue([testEmptyNote]);
+    const dispatch = jest.fn();
+    await startLoadingNotes()(dispatch, getState);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(setNotes([testEmptyNote]));
+    expect(loadNotes as jest.Mock).toHaveBeenCalledWith(state.auth.uid);
   });
 
   afterAll(() => {

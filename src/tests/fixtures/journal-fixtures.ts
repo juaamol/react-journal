@@ -54,3 +54,6 @@ export const noteActiveDifferentListState: JournalState = {
   notes: [{ ...testNote, title: testNote.title + '1234' }],
   active: testNote,
 };
+
+export const testCollectionRef = { type: 'collection' };
+export const testDocumentRef = { id: '1234', type: 'document' };
