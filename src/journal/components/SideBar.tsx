@@ -15,8 +15,10 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setActiveNote } from '../../store/journal';
 
-export const SideBar: FC<{ drawerWidth: number }> = (props) => {
-  const { drawerWidth = 240 } = props;
+export const SideBar: FC<{ drawerWidth: number; isOpen?: boolean }> = (
+  props,
+) => {
+  const { drawerWidth = 240, isOpen = true } = props;
   const { auth, journal } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const username = auth.displayName;
@@ -26,18 +28,19 @@ export const SideBar: FC<{ drawerWidth: number }> = (props) => {
     <Box
       component='nav'
       sx={{
+        zIndex: 500,
         width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
       }}
     >
       <Drawer
         variant='permanent'
-        open
         sx={{
-          display: { xs: 'block' },
+          display: { xs: isOpen ? 'block' : 'none', sm: 'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
       >
+        <Toolbar sx={{ display: { xs: 'block', sm: 'none' } }} />
         <Toolbar>
           <Typography variant='h6' noWrap component='span'>
             {username}
