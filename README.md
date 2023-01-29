@@ -1,6 +1,11 @@
-# Getting Started with Create React App
+# Journal App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app allows the user to store notes with images
+
+![image](https://user-images.githubusercontent.com/50924448/215336518-a1ca88f3-4936-4f04-8b40-6818c4cbc490.png)
+
+![image](https://user-images.githubusercontent.com/50924448/215336456-5b2ada86-445e-4e61-8888-d9b856aa1c1c.png)
+
 
 ## Available Scripts
 
