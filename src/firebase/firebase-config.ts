@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore/lite';
+import { getFirestore, initializeFirestore } from 'firebase/firestore/lite';
 import config from '../config/config';
 
 export const firebaseConfig = {
@@ -13,5 +13,6 @@ export const firebaseConfig = {
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
+initializeFirestore(firebaseApp, { ignoreUndefinedProperties: true });
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseDB = getFirestore(firebaseApp);

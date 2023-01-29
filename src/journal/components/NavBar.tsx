@@ -9,8 +9,13 @@ import Typography from '@mui/material/Typography';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { startLogingOut } from '../../store/auth/thunks';
 
-export const NavBar: FC<{ drawerWidth: number }> = (props) => {
-  const { drawerWidth = 240 } = props;
+interface NavBarProps {
+  drawerWidth: number;
+  onToggleSideBar?: () => void;
+}
+
+export const NavBar: FC<NavBarProps> = (props) => {
+  const { drawerWidth = 240, onToggleSideBar } = props;
   const dispatch = useAppDispatch();
 
   const onLogout = () => {
@@ -30,6 +35,7 @@ export const NavBar: FC<{ drawerWidth: number }> = (props) => {
           color='inherit'
           edge='start'
           sx={{ mr: 2, display: { sm: 'none' } }}
+          onClick={onToggleSideBar}
         >
           <MenuOutlined></MenuOutlined>
         </IconButton>
