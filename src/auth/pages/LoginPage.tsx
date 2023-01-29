@@ -48,6 +48,7 @@ export const LoginPage = () => {
           handleSubmit,
         }) => (
           <form
+            name='Login'
             onSubmit={handleSubmit}
             className='animate__animated animate__fadeIn animate__fater'
           >
@@ -71,6 +72,9 @@ export const LoginPage = () => {
                   type='password'
                   fullWidth
                   name='password'
+                  inputProps={{
+                    label: 'Password',
+                  }}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.password}
