@@ -1,5 +1,6 @@
 import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
 import {
+  startDeletingNote,
   startLoadingNotes,
   startNewNote,
   startSavingNote,
@@ -120,6 +121,23 @@ describe('Test journal thunks', () => {
         { id: '1', url: 'url' },
       ]),
     );
+  });
+
+  test('Should delete active note', async () => {
+    const state = testRootState;
+    const { id } = state.journal.active!;
+    const resourceUrl = `${state.auth.uid}/journal/notes/${id}`;
+    const getState = jest.fn(() => state);
+    (doc as jest.Mock).mockReturnValue(testDocumentRef);
+    const dispatch = jest.fn();
+    await startDeletingNote()(dispatch, getState);
+
+    expect(dispatch).toHaveBeenCalledTimes(3);
+    expect(dispatch).toHaveBeenCalledWith(setSaving());
+    expect(dispatch).toHaveBeenCalledWith(deleteActiveNote());
+    expect(dispatch).toHaveBeenCalledWith(setIsNotSaving());
+    expect((doc as jest.Mock).mock.calls[0][1]).toBe(resourceUrl);
+    expect((deleteDoc as jest.Mock).mock.calls[0][0]).toEqual(testDocumentRef);
   });
 
   afterAll(() => {

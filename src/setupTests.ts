@@ -5,12 +5,6 @@
 import '@testing-library/jest-dom';
 
 jest.mock('./firebase/firebase-config', () => ({}));
-jest.mock('./config/config', () => {
-  return {
-    CLOUDINARY_UPLOAD_PRESET: 'react-journal',
-    CLOUDINARY_URL_UPLOAD: 'cloudinary_url',
-  };
-});
 
 async function mockFetch(url: string) {
   switch (url) {
